@@ -90,7 +90,7 @@
     hero.addEventListener("pointerdown", (e) => { const b = cv.getBoundingClientRect(); spawn(e.clientX - b.left, e.clientY - b.top, 70, 2, true); });
     function draw() {
       cx.clearRect(0, 0, W, H);
-      if (Math.random() < 0.5) spawn(Math.random() * W, H + 10, 1, 0.3, false); // ambient rising dust
+      if (!window.__motionPaused && Math.random() < 0.5) spawn(Math.random() * W, H + 10, 1, 0.3, false); // ambient rising dust
       cx.globalCompositeOperation = "lighter";
       for (let i = P.length - 1; i >= 0; i--) {
         const p = P[i];
@@ -127,7 +127,7 @@
     const r1 = $("#mq1"), r2 = $("#mq2");
     (function step() {
       const dy = scrollY - lastY; lastY = scrollY; boost = boost * 0.9 + Math.abs(dy) * 0.08;
-      const sp = 0.6 + boost;
+      const sp = window.__motionPaused ? 0 : 0.6 + boost;
       const w1 = r1.scrollWidth / 3, w2 = r2.scrollWidth / 3;
       x1 = (x1 - sp) % w1; x2 = (x2 + sp) % w2;
       r1.style.transform = `translate3d(${x1}px,0,0) skewX(${-Math.min(12, boost * 2)}deg)`;
@@ -332,7 +332,13 @@
       data.faces = parseInt(data.faces || "1", 10) || 1;
       btn.disabled = true; btn.textContent = "Sending…";
       try {
-        await S.addBooking(data); f.reset(); $("#bk-faces").value = 1;
+        const saved = await S.addBooking(data); f.reset(); $("#bk-faces").value = 1;
+        if (window.Mailer && Mailer.ready) { // tell Naina, and send the client a "request received" email
+          const to = st.notify_email || st.legal_email || st.email;
+          const n = Mailer.T.newBooking(st, saved);
+          Mailer.send({ to, subject: n.subject, html: n.html, replyTo: saved.email || "", fromName: st.brand_name + " website" }).catch((e) => console.warn(e));
+          if (saved.email) { const r = Mailer.T.received(st, saved); Mailer.send({ to: saved.email, toName: saved.name, subject: r.subject, html: r.html, replyTo: to, fromName: st.brand_name }).catch((e) => console.warn(e)); }
+        }
         msg.className = "form-msg ok"; msg.textContent = "Request received. You'll get a reply to confirm your date" + (st.whatsapp ? " on WhatsApp." : ".");
       } catch (err) { msg.className = "form-msg err"; msg.textContent = "Couldn't send your request: " + err.message; }
       finally { btn.disabled = false; btn.textContent = "Send booking request"; }
@@ -358,6 +364,19 @@
     els.forEach((e) => io.observe(e));
   }
 
+  /* pause / play all automatic motion (WCAG 2.2.2) */
+  function motionToggle() {
+    const b = $("#motionBtn"), v = $("#heroVideo");
+    const set = (paused) => {
+      document.body.classList.toggle("still", paused);
+      b.setAttribute("aria-pressed", String(paused)); b.textContent = paused ? "Play motion" : "Pause motion";
+      if (paused) v.pause(); else v.play().catch(() => {});
+      window.__motionPaused = paused;
+    };
+    b.addEventListener("click", () => set(!window.__motionPaused));
+    if (reduced) set(true);
+  }
+
   /* =========================================================
      BOOT
      ========================================================= */
@@ -380,6 +399,8 @@
     $("#lbClose").addEventListener("click", closeLb);
     $("#lb").addEventListener("click", (e) => { if (e.target.id === "lb") closeLb(); });
     addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#lb").hidden) closeLb(); });
+    motionToggle();
+    if (settings.legal_name) $("#tradingAs").textContent = " is a trading name of " + settings.legal_name;
     if (reduced) document.body.classList.add("loaded"); else { await preload(); document.body.classList.add("loaded"); }
   })();
 })();

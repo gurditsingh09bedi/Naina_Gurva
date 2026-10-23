@@ -8,7 +8,7 @@
   const cfg = window.SITE_CONFIG || {};
   const LIVE = !!(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase && window.supabase.createClient);
   const sb = LIVE ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY) : null;
-  const DB_KEY = "mua_demo_db_v3";
+  const DB_KEY = "mua_demo_db_v4";
   const AUTH_KEY = "mua_demo_auth_v1";
   const TABLES = ["posts", "offers", "services", "bookings"];
 

@@ -77,15 +77,29 @@
   </form>
 </div>
 
+<!-- BOOKING REPLY -->
+<div class="drawer-bg" id="replyBg" hidden>
+  <form class="drawer" id="replyForm" novalidate>
+    <header class="dr-head"><h2 id="rpTitle">Accept booking</h2><button type="button" class="x" id="rpClose" aria-label="Close">×</button></header>
+    <div class="dr-body" id="rpBody"></div>
+    <footer class="dr-foot rp-foot">
+      <span class="err" id="rpErr" role="alert"></span>
+      <a class="b b-ghost" id="rpWa" target="_blank" rel="noopener">WhatsApp message</a>
+      <a class="b b-ghost" id="rpMailto">Email app</a>
+      <button type="submit" class="b b-gold" id="rpSend">Send email &amp; confirm</button>
+    </footer>
+  </form>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="assets/js/config.js"></script>
+<script>/* the database library is only loaded once Supabase is connected (see config.js) */
+if (window.SITE_CONFIG && SITE_CONFIG.SUPABASE_URL) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>');</script>
 <script src="assets/js/seed.js"></script>
 <script src="assets/js/store.js"></script>
 <script src="assets/js/common.js"></script>
+<script src="assets/js/mailer.js"></script>
 <script src="assets/js/admin.js"></script>
 </body>
 </html>

@@ -7,8 +7,7 @@
 
   function md(text) {
     const src = String(text || "");
-    if (window.marked && window.DOMPurify) return DOMPurify.sanitize(marked.parse(src));
-    return miniMd(src);
+    return miniMd(src); // escapes all HTML, so posts can't inject scripts
   }
   /* small markdown fallback if the CDN library can't load: headings, bold, italics, lists, links */
   function miniMd(src) {

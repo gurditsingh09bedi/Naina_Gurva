@@ -5,6 +5,7 @@
 -- ============================================================
 
 -- ---------- tables ----------
+-- (Already ran an older version? Also run:  alter table public.bookings add column if not exists replied_at timestamptz;)
 create table if not exists public.settings (
   id int primary key default 1,
   data jsonb not null default '{}'::jsonb,
@@ -61,6 +62,7 @@ create table if not exists public.bookings (
   location text,
   message text,
   status text default 'new',
+  replied_at timestamptz,
   created_at timestamptz default now()
 );
 
@@ -121,4 +123,4 @@ create policy "admin delete media" on storage.objects for delete to authenticate
 
 -- ---------- make yourself admin ----------
 -- Replace the email below with the email you will log in with, then run:
-insert into public.admins (email) values ('her-email@example.com') on conflict do nothing;
+insert into public.admins (email) values ('mwah2magirlies@hotmail.co.uk') on conflict do nothing;

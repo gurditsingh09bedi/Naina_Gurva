@@ -5,7 +5,7 @@
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const slugify = (t) => String(t || "").toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").replace(/-+/g, "-").slice(0, 70);
   const fmt = (iso) => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); };
-  const md = (t) => (window.marked && window.DOMPurify ? DOMPurify.sanitize(marked.parse(String(t || ""))) : (window.UI ? UI.miniMd(String(t || "")) : esc(t)));
+  const md = (t) => (window.UI ? UI.miniMd(String(t || "")) : esc(t));
 
   let tab = "bookings", settings = null, editing = null;
 
@@ -69,6 +69,17 @@
       { k: "booking_title", label: "Heading", type: "text" },
       { k: "booking_note", label: "Note above the form", type: "textarea", rows: 2 },
       { k: "occasions", label: "Occasions in the dropdown (one per line)", type: "lines" } ] },
+    { title: "Business & legal details (shown on Privacy and Booking terms pages)", fields: [
+      { k: "legal_name", label: "Legal name of the business owner or company (e.g. Naina Gurvani, or Naina's Beauty Ltd)", type: "text" },
+      { k: "legal_address", label: "Business address for legal notices (can be a business address, not home)", type: "textarea", rows: 2 },
+      { k: "legal_email", label: "Email for privacy and booking questions", type: "text" },
+      { k: "ico_reg", label: "ICO registration number (after paying the data protection fee)", type: "text" },
+      { k: "deposit_text", label: "Deposit policy", type: "textarea", rows: 2 },
+      { k: "travel_text", label: "Travel charges", type: "textarea", rows: 2 },
+      { k: "retention_months", label: "Delete enquiries that don't become bookings after (months)", type: "number" } ] },
+    { title: "Booking emails", fields: [
+      { k: "notify_email", label: "Send new booking alerts to this email", type: "text" },
+      { k: "owner_signoff", label: "Name to sign emails with", type: "text" } ] },
     { title: "Contact", fields: [
       { k: "whatsapp", label: "WhatsApp number (with country code, e.g. +44 7…)", type: "text" },
       { k: "phone", label: "Phone", type: "text" },
@@ -230,9 +241,9 @@
     });
   }
 
-  const STATUSES = [["new", "New"], ["confirmed", "Confirmed"], ["done", "Done"], ["cancelled", "Cancelled"]];
+  const STATUSES = [["new", "New"], ["confirmed", "Confirmed"], ["declined", "Declined"], ["done", "Done"], ["cancelled", "Cancelled"]];
   async function renderBookings(view, add) {
-    $("#viewTitle").textContent = "Bookings"; $("#viewSub").textContent = "Requests sent from the booking form. Change the status as you confirm them.";
+    $("#viewTitle").textContent = "Bookings"; $("#viewSub").textContent = "Requests from the booking form. Accept or decline to send the client a confirmation by email or WhatsApp.";
     add.hidden = true;
     view.innerHTML = `<p class="loading">Loading…</p>`;
     let rows;
@@ -249,7 +260,7 @@
             <p class="meta">${[r.ready_by && "Ready by " + r.ready_by, r.location, r.phone, r.email].filter(Boolean).map(esc).join(" · ")}</p>
             ${r.message ? `<p class="ex">${esc(r.message)}</p>` : ""}
             <p class="meta">Received ${esc(fmt(r.created_at))}</p></div>
-          <div class="bk-act"><select aria-label="Status for ${esc(r.name)}">${STATUSES.map(([v, l]) => `<option value="${v}" ${(r.status || "new") === v ? "selected" : ""}>${l}</option>`).join("")}</select>
+          <div class="bk-act">${(r.status || "new") === "new" ? `<button class="b b-gold b-sm" data-act="accept">Accept</button><button class="b b-ghost b-sm" data-act="decline">Decline</button>` : ""}<select aria-label="Status for ${esc(r.name)}">${STATUSES.map(([v, l]) => `<option value="${v}" ${(r.status || "new") === v ? "selected" : ""}>${l}</option>`).join("")}</select>
             ${r.phone ? `<a class="b b-ghost b-sm" href="https://wa.me/${esc(String(r.phone).replace(/[^\d]/g, "").replace(/^0/, "44"))}" target="_blank" rel="noopener">WhatsApp</a>` : ""}
             <button class="b b-ghost b-sm" data-act="del">Delete</button></div>
         </article>`).join("")}</div>` : `<div class="empty"><p>No booking requests yet. They'll appear here as soon as someone sends the form.</p></div>`}`;
@@ -257,8 +268,78 @@
       const row = rows.find((r) => r.id === el.dataset.id);
       $("select", el).onchange = async (e) => { row.status = e.target.value; try { await S.save("bookings", row); toast("Status updated"); render(); } catch (err) { toast(err.message, true); } };
       $('[data-act="del"]', el).onclick = (e) => armDelete(e.currentTarget, async () => { try { await S.remove("bookings", row.id); toast("Booking deleted"); render(); } catch (err) { toast(err.message, true); } });
+      const acc = $('[data-act="accept"]', el), dec = $('[data-act="decline"]', el);
+      if (acc) acc.onclick = () => openReply("accept", row);
+      if (dec) dec.onclick = () => openReply("decline", row);
     });
   }
+
+  /* ---------- accept / decline with a message to the client ---------- */
+  const REASONS = ["The date is already fully booked", "The location is outside the area I cover", "The timing doesn't work with another booking", "This service isn't something I offer", "Other (explain below)"];
+  let replying = null;
+  const waNumber = (p) => String(p || "").replace(/[^\d]/g, "").replace(/^0/, "44");
+  async function openReply(kind, row) {
+    const st = await S.settings();
+    replying = { kind, row, st };
+    const acc = kind === "accept";
+    $("#rpTitle").textContent = (acc ? "Accept: " : "Decline: ") + row.name;
+    $("#rpBody").innerHTML = `
+      <p class="sub">${esc(row.occasion || "")} · ${esc(Mailer.niceDate(row.event_date))}${row.ready_by ? " · ready by " + esc(row.ready_by) : ""}${row.location ? " · " + esc(row.location) : ""}</p>
+      ${acc ? `
+        <label class="f"><span class="fl">Price for this booking</span><input id="rp-price" placeholder="e.g. £300"></label>
+        <label class="f"><span class="fl">Deposit</span><input id="rp-deposit" placeholder="e.g. £50 to secure the date, by bank transfer within 3 days"></label>
+        <label class="f"><span class="fl">Your arrival time</span><input id="rp-arrival" placeholder="e.g. 8:00am"></label>
+        <label class="f"><span class="fl">Personal note (optional)</span><textarea id="rp-note" rows="3" placeholder="Anything else the client should know"></textarea></label>`
+      : `
+        <label class="f"><span class="fl">Reason</span><select id="rp-reason">${REASONS.map((r) => `<option>${esc(r)}</option>`).join("")}</select></label>
+        <label class="f"><span class="fl">Extra note (optional)</span><textarea id="rp-note" rows="3" placeholder="e.g. I'm free the day before if that helps"></textarea></label>`}
+      <div class="rp-to">${row.email ? `Email goes to <b>${esc(row.email)}</b>` : `<b>No email address</b> on this request: use the WhatsApp button.`}${Mailer.ready ? "" : `<br><small>Email sending isn't set up yet (README → Email notifications), so “Send” will open your email app instead.</small>`}</div>
+      <div class="f"><span class="fl">Preview</span><div class="rp-prev" id="rpPrev"></div></div>`;
+    $("#rpSend").textContent = acc ? "Send & mark confirmed" : "Send & mark declined";
+    $("#rpErr").textContent = "";
+    const refresh = () => {
+      const o = readReply();
+      const t = acc ? Mailer.T.accepted(st, row, o) : Mailer.T.declined(st, row, o);
+      $("#rpPrev").innerHTML = t.html;
+      const txt = acc ? Mailer.plain.accepted(st, row, o) : Mailer.plain.declined(st, row, o);
+      const wa = $("#rpWa"); wa.hidden = !row.phone; wa.href = "https://wa.me/" + waNumber(row.phone) + "?text=" + encodeURIComponent(txt);
+      const ml = $("#rpMailto"); ml.hidden = !row.email; ml.href = "mailto:" + encodeURIComponent(row.email || "") + "?subject=" + encodeURIComponent(t.subject) + "&body=" + encodeURIComponent(txt);
+    };
+    $$("#rpBody input, #rpBody textarea, #rpBody select").forEach((i) => i.addEventListener("input", refresh));
+    refresh();
+    $("#replyBg").hidden = false; document.body.classList.add("lock");
+  }
+  function readReply() {
+    const v = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ""; };
+    let reason = v("rp-reason"); if (/^Other/.test(reason)) reason = v("rp-note") ? "see note below" : "it isn't possible on this occasion";
+    return { price: v("rp-price"), deposit: v("rp-deposit"), arrival: v("rp-arrival"), note: v("rp-note"), reason };
+  }
+  function closeReply() { $("#replyBg").hidden = true; document.body.classList.remove("lock"); replying = null; }
+  async function markReplied(status) {
+    const { row } = replying; row.status = status; row.replied_at = new Date().toISOString();
+    await S.save("bookings", row);
+  }
+  $("#rpClose").addEventListener("click", closeReply);
+  ["rpWa", "rpMailto"].forEach((id) => $("#" + id).addEventListener("click", async () => {
+    if (!replying) return;
+    try { await markReplied(replying.kind === "accept" ? "confirmed" : "declined"); toast("Marked as " + (replying.kind === "accept" ? "confirmed" : "declined")); } catch (e) { toast(e.message, true); }
+    setTimeout(() => { closeReply(); render(); }, 300);
+  }));
+  $("#replyForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); if (!replying) return;
+    const { kind, row, st } = replying; const acc = kind === "accept"; const o = readReply();
+    const t = acc ? Mailer.T.accepted(st, row, o) : Mailer.T.declined(st, row, o);
+    const btn = $("#rpSend");
+    if (!row.email) { $("#rpErr").textContent = "No email address. Use the WhatsApp button."; return; }
+    if (!Mailer.ready) { $("#rpMailto").click(); location.href = $("#rpMailto").href; return; }
+    btn.disabled = true; btn.textContent = "Sending…";
+    try {
+      await Mailer.send({ to: row.email, toName: row.name, subject: t.subject, html: t.html, replyTo: st.legal_email || st.email, fromName: st.brand_name });
+      await markReplied(acc ? "confirmed" : "declined");
+      toast(acc ? "Confirmation sent" : "Reply sent"); closeReply(); render();
+    } catch (err) { $("#rpErr").textContent = err.message; }
+    finally { btn.disabled = false; btn.textContent = acc ? "Send & mark confirmed" : "Send & mark declined"; }
+  });
 
   async function renderSettings(view, add) {
     $("#viewTitle").textContent = "Website text & photos"; $("#viewSub").textContent = "Change the name, headlines, story scenes, photos and contact details.";

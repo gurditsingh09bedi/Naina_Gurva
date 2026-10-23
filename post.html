@@ -48,12 +48,11 @@
   </div>
 </header>
 <main id="post"></main>
-<footer class="foot"><div class="wrap foot-in"><div class="logo"><img class="logo-img" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span data-s="brand_name">Naina's</span><small data-s="brand_suffix">Beauty n Beyond</small></div><div class="foot-links"><a href="index.html">Home</a><a href="index.html#book">Book</a></div></div></footer>
+<footer class="foot"><div class="wrap foot-in"><div class="logo"><img class="logo-img" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span data-s="brand_name">Naina's</span><small data-s="brand_suffix">Beauty n Beyond</small></div><div class="foot-links"><a href="index.html">Home</a><a href="index.html#book">Book</a><a href="privacy.html">Privacy</a><a href="terms.html">Booking terms</a></div></div></footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="assets/js/config.js"></script>
+<script>/* the database library is only loaded once Supabase is connected (see config.js) */
+if (window.SITE_CONFIG && SITE_CONFIG.SUPABASE_URL) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>');</script>
 <script src="assets/js/seed.js"></script>
 <script src="assets/js/store.js"></script>
 <script src="assets/js/common.js"></script>

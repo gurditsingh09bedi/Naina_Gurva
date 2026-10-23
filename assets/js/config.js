@@ -13,5 +13,13 @@
 */
 window.SITE_CONFIG = {
   SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: ""
+  SUPABASE_ANON_KEY: "",
+
+  /* Email notifications and booking replies (free EmailJS account, see README → "Email notifications").
+     Leave empty and the admin opens your email app / WhatsApp with the message ready instead. */
+  EMAILJS: {
+    publicKey: "",
+    serviceId: "",
+    templateId: ""
+  }
 };

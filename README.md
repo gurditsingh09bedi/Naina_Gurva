@@ -35,7 +35,7 @@ At this point the site works in demo mode.
 
 ## Step 2: Connect the free database (Supabase)
 
-1. Sign up at **supabase.com** (free plan) and click **New project**. Choose a name, a database password and a region close to you (e.g. London).
+1. Sign up at **supabase.com** (free plan) and click **New project**. Choose a name, a database password and choose the **London (eu-west-2)** region so booking data stays in the UK.
 2. When it's ready, open **SQL Editor → New query**.
 3. Open `supabase/schema.sql` from this project, **change the email on the last line** to the email she will log in with, paste the whole file and click **Run**.
 4. Create her admin login: **Authentication → Users → Add user → Create new user**. Enter the same email and a strong password, and tick **Auto Confirm User**.
@@ -58,6 +58,35 @@ At this point the site works in demo mode.
 2. Click **Import starter content** to copy the sample portfolio, blog posts, offers and services into the database.
 3. Open **Website text & photos** and change the studio name, headline, photos, story scenes and contact details (WhatsApp, Instagram, email).
 
+## Logging in to the admin
+
+- **Now (demo mode):** open `admin.html`, use any email and the password `demo`. Changes only save in that browser.
+- **After going live (step 2):** sign in with **Mwah2magirlies@hotmail.co.uk** and the password Naina chose when creating her user in Supabase (Authentication → Users → Add user). Only that email is allowed to edit, because it's the one in the `admins` table. Forgot the password? In Supabase go to Authentication → Users → her user → Send password recovery, or set a new one there.
+
+## Email notifications (free, about 10 minutes)
+
+Uses **EmailJS** (free plan, 200 emails a month), sending from Naina's own Hotmail, so no domain is needed.
+
+1. Sign up at **emailjs.com** with Mwah2magirlies@hotmail.co.uk.
+2. **Email Services → Add New Service → Outlook**, connect her Hotmail account. Copy the **Service ID**.
+3. **Email Templates → Create New Template**, then set:
+   - To Email: `{{to_email}}`
+   - From Name: `{{from_name}}`
+   - Reply To: `{{reply_to}}`
+   - Subject: `{{subject}}`
+   - Content: switch to the code/HTML editor and enter `{{{html}}}` (three curly brackets)
+   Save, and copy the **Template ID**.
+4. **Account → General**: copy the **Public Key**.
+5. **Account → Security**: add `https://gurditsingh09bedi.github.io` to the allowed origins so nobody else can use the key.
+6. Paste the three values into `assets/js/config.js` under `EMAILJS` and commit.
+
+What happens then:
+- **New request:** Naina gets an email straight away with all the details and a button to open the admin. If the client gave an email, they get a "we've got your request, not confirmed yet" email.
+- **Accept:** in Bookings click **Accept**, fill in price, deposit and arrival time, check the preview and click **Send & mark confirmed**. The client gets a branded confirmation email.
+- **Decline:** click **Decline**, pick a reason (fully booked, outside area, timing clash, service not offered, or other) and add a note. The client gets a polite email with the reason.
+- **No email address?** Use the **WhatsApp message** button: it opens WhatsApp with the confirmation or reason already typed.
+- Until EmailJS is set up, the buttons open her email app or WhatsApp with the message ready, so it works from day one.
+
 ## Using the admin panel
 
 - **Bookings**: every form request appears here. Set the status (New → Confirmed → Done / Cancelled), message the client on WhatsApp, or delete.
@@ -69,6 +98,10 @@ At this point the site works in demo mode.
 Text formatting in posts: `## Heading`, `**bold**`, `- bullet point`, `1. numbered point`.
 
 **Story footage:** the scroll film and opening video use free clips from Mixkit (mixkit.co, Mixkit Stock Video Free License). The scene titles, text and tags are editable in the admin; the footage itself lives in `assets/ritual/` and `assets/media/`. The `raw/` folder and `get-videos.ps1` were only used to prepare the clips and don't need to be uploaded to GitHub.
+
+## Legal pages
+
+`privacy.html` and `terms.html` fill in the business name, address, email, ICO number, deposit and travel wording from **Admin → Website text & photos → Business & legal details**. Fill these in before going live. See the compliance PDF for the full checklist.
 
 ## Free plan notes
 

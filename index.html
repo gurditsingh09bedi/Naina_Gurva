@@ -68,6 +68,7 @@
       <span class="brandmark" data-s="brand_name">Naina's</span>
       <span class="tc" id="heroTc">00:00:00:00</span>
     </div>
+    <button class="motion-btn" id="motionBtn" type="button" aria-pressed="false">Pause motion</button>
     <div class="lb-bar lb-bot" aria-hidden="true"></div>
   </section>
 
@@ -94,6 +95,7 @@
         <span class="rec">● REC</span><span class="tc" id="rTc">00:00:00:00</span>
       </div>
       <div class="r-hint" id="rHint" aria-hidden="true">Keep scrolling</div>
+      <p class="r-credit">Illustrative stock footage · Naina's own work is in the lookbook below</p>
     </div>
     <!-- readable version for screen readers / no-JS -->
     <ol class="sr-only" id="rSr"></ol>
@@ -170,6 +172,7 @@
         <label class="fld"><span>Anything I should know?</span><textarea id="bk-msg" name="message" rows="3" placeholder="Outfit colours, jewellery, the look you have in mind…"></textarea></label>
         <button class="btn btn-gold btn-block" type="submit" id="bkSubmit" data-cursor="Send">Send booking request</button>
         <p class="form-msg" id="bkMsg" role="status" aria-live="polite"></p>
+        <p class="form-note">Your details are only used to reply about your booking. Please don't include health details unless you want us to know about allergies or skin conditions. See our <a href="privacy.html">privacy notice</a> and <a href="terms.html">booking terms</a>.</p>
       </form>
     </div>
   </section>
@@ -179,9 +182,9 @@
   <div class="foot-big wrap" aria-hidden="true"><span data-s="brand_name">Naina's</span></div>
   <div class="wrap foot-in">
     <div><div class="logo"><img class="logo-img" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span data-s="brand_name">Naina's</span><small data-s="brand_suffix">Beauty n Beyond</small></div><p class="muted" data-s="footer_note"></p></div>
-    <div class="foot-links"><a href="#lookbook">Work</a><a href="#journal">Journal</a><a href="#book">Book</a><a href="admin.html" class="muted">Admin</a></div>
+    <div class="foot-links"><a href="#lookbook">Work</a><a href="#journal">Journal</a><a href="#book">Book</a><a href="privacy.html">Privacy</a><a href="terms.html">Booking terms</a><a href="admin.html" class="muted">Admin</a></div>
   </div>
-  <p class="wrap copy muted">© <span id="yr"></span> <span data-s="brand_name">Naina's</span> · Story footage: Mixkit (free licence)</p>
+  <p class="wrap copy muted">© <span id="yr"></span> <span data-s="brand_name">Naina's</span> <span data-s="brand_suffix">Beauty n Beyond</span><span id="tradingAs"></span> · Film footage in “The Ritual”: Mixkit stock video (free licence), used for illustration.</p>
 </footer>
 
 <!-- portfolio lightbox -->
@@ -193,13 +196,13 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="assets/js/config.js"></script>
+<script>/* the database library is only loaded once Supabase is connected (see config.js) */
+if (window.SITE_CONFIG && SITE_CONFIG.SUPABASE_URL) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>');</script>
 <script src="assets/js/seed.js"></script>
 <script src="assets/js/store.js"></script>
 <script src="assets/js/common.js"></script>
+<script src="assets/js/mailer.js"></script>
 <script src="assets/ritual/manifest.js"></script>
 <script src="assets/js/home.js"></script>
 </body>
