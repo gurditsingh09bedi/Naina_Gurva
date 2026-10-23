@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Naina's Beauty n Beyond</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Naina's Beauty n Beyond: bridal, festive and party makeup. When the eyes do all the talking.">
+<link rel="icon" type="image/png" href="assets/img/logo-badge-64.png">
+<link rel="apple-touch-icon" href="assets/img/logo-badge-160.png">
+<meta property="og:image" content="assets/img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<script>document.documentElement.classList.replace("no-js", "js");</script>
+</head>
+<body class="site home">
+<div class="grain" aria-hidden="true"></div>
+
+<!-- preloader -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="ld-curtain ld-top"></div><div class="ld-curtain ld-bot"></div>
+  <div class="ld-in">
+    <img class="ld-logo" src="assets/img/logo-badge-512.png" alt="" width="220" height="220">
+    <p class="ld-kicker">A film in six scenes</p>
+    <div class="ld-swatch"><i id="ldBar"></i></div>
+    <p class="ld-pct"><span id="ldPct">0</span>%</p>
+  </div>
+</div>
+
+<!-- custom cursor -->
+<div class="cur" id="cur" aria-hidden="true"><span class="cur-dot"></span><span class="cur-ring"><b id="curLabel"></b></span></div>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top"><img class="logo-img" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span data-s="brand_name">Naina's</span><small data-s="brand_suffix">Beauty n Beyond</small></a>
+    <nav class="links" aria-label="Main">
+      <a href="#story">The Ritual</a><a href="#lookbook">Work</a><a href="#offers">Offers</a><a href="#journal">Journal</a>
+    </nav>
+    <a class="btn btn-gold btn-sm" href="#book" data-cursor="Book">Book</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ============ HERO ============ -->
+  <section class="h2o" aria-label="Introduction">
+    <div class="h2o-media" aria-hidden="true">
+      <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/media/hero-poster.jpg">
+        <source src="assets/media/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="h2o-grade" aria-hidden="true"></div>
+    <canvas class="powder" id="powder" aria-hidden="true"></canvas>
+    <div class="lb-bar lb-top" aria-hidden="true"></div>
+    <div class="h2o-in wrap">
+      <p class="kicker reveal-up"><span data-s="brand_name">Naina's</span> · <span data-s="hero_kicker">Bridal · Festive · Editorial</span></p>
+      <h1 class="h2o-title" id="heroTitle" data-s="hero_title">When the eyes do all the talking.</h1>
+      <p class="h2o-sub" data-s="hero_sub"></p>
+      <div class="h2o-cta">
+        <a class="btn btn-gold" href="#book" data-cursor="Book">Book your look</a>
+        <a class="btn btn-ghost" href="#story" data-cursor="Watch">Watch the ritual</a>
+      </div>
+    </div>
+    <div class="h2o-foot wrap" aria-hidden="true">
+      <span class="scrollcue"><i></i>Scroll to begin</span>
+      <span class="brandmark" data-s="brand_name">Naina's</span>
+      <span class="tc" id="heroTc">00:00:00:00</span>
+    </div>
+    <div class="lb-bar lb-bot" aria-hidden="true"></div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-row" id="mq1"></div>
+    <div class="mq-row mq-rev" id="mq2"></div>
+  </div>
+
+  <!-- ============ THE RITUAL (scroll-driven film) ============ -->
+  <section class="ritual" id="story" aria-label="The ritual: how a look is made">
+    <div class="r-stage">
+      <canvas class="r-canvas" id="rCanvas"></canvas>
+      <div class="r-grade" aria-hidden="true"></div>
+      <div class="r-num" id="rNum" aria-hidden="true">01</div>
+      <div class="r-copy wrap">
+        <p class="r-kicker"><span data-s="story_title">The Ritual</span> · <span id="rScene">Scene 01</span></p>
+        <h2 class="r-title" id="rTitle"></h2>
+        <p class="r-text" id="rText"></p>
+        <ul class="r-chips" id="rChips"></ul>
+      </div>
+      <ol class="r-rail" id="rRail" aria-hidden="true"></ol>
+      <div class="r-hud" aria-hidden="true">
+        <span class="rec">● REC</span><span class="tc" id="rTc">00:00:00:00</span>
+      </div>
+      <div class="r-hint" id="rHint" aria-hidden="true">Keep scrolling</div>
+    </div>
+    <!-- readable version for screen readers / no-JS -->
+    <ol class="sr-only" id="rSr"></ol>
+  </section>
+
+  <!-- ============ LOOKBOOK (her work) ============ -->
+  <section class="lookbook" id="lookbook" aria-label="Portfolio">
+    <div class="lk-stage">
+      <div class="lk-head wrap">
+        <p class="kicker">The reveal · Portfolio</p>
+        <h2 class="h2" data-s="work_title">The Work</h2>
+        <p class="lk-count"><span id="lkNow">01</span> / <span id="lkAll">04</span></p>
+      </div>
+      <div class="lk-track" id="lkTrack"></div>
+      <div class="lk-progress" aria-hidden="true"><i id="lkBar"></i></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about wrap" id="about">
+    <figure class="about-img reveal"><img data-s-src="about_image" src="assets/img/soft-pink-glam.jpg" alt="Soft pink evening glam" loading="lazy"></figure>
+    <div class="about-copy reveal">
+      <p class="kicker" data-s="about_kicker">The artist</p>
+      <h2 class="h2" data-s="about_title"></h2>
+      <div class="prose" id="aboutText"></div>
+      <p class="area" data-s="area"></p>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="section wrap" id="services">
+    <div class="sec-head reveal"><p class="kicker">What I do</p><h2 class="h2" data-s="services_title">Services</h2></div>
+    <div class="services" id="servicesList"></div>
+  </section>
+
+  <!-- ============ OFFERS ============ -->
+  <section class="section offers-band" id="offers">
+    <div class="wrap">
+      <div class="sec-head reveal"><p class="kicker">Limited time</p><h2 class="h2" data-s="offers_title">Current Offers</h2></div>
+      <div class="offers" id="offersList"></div>
+    </div>
+  </section>
+
+  <!-- ============ JOURNAL ============ -->
+  <section class="section wrap" id="journal">
+    <div class="sec-head reveal"><p class="kicker">Tips &amp; looks</p><h2 class="h2" data-s="journal_title">Journal</h2></div>
+    <div class="journal" id="journalList"></div>
+  </section>
+
+  <!-- ============ BOOKING ============ -->
+  <section class="section book-band" id="book">
+    <div class="wrap book">
+      <div class="book-copy reveal">
+        <p class="kicker">Appointments</p>
+        <h2 class="h2" data-s="booking_title">Book your look</h2>
+        <p class="lead" data-s="booking_note"></p>
+        <ul class="contact" id="contactList"></ul>
+      </div>
+      <form class="book-form reveal" id="bookForm" novalidate>
+        <div class="row2">
+          <label class="fld"><span>Your name</span><input id="bk-name" name="name" required autocomplete="name"></label>
+          <label class="fld"><span>Phone / WhatsApp</span><input id="bk-phone" name="phone" required inputmode="tel" autocomplete="tel"></label>
+        </div>
+        <label class="fld"><span>Email</span><input id="bk-email" name="email" type="email" autocomplete="email"></label>
+        <div class="row2">
+          <label class="fld"><span>Occasion</span><select id="bk-occasion" name="occasion" required></select></label>
+          <label class="fld"><span>Event date</span><input id="bk-date" name="event_date" type="date" required></label>
+        </div>
+        <div class="row2">
+          <label class="fld"><span>Ready-by time</span><input id="bk-ready" name="ready_by" type="time"></label>
+          <label class="fld"><span>Number of faces</span><input id="bk-faces" name="faces" type="number" min="1" max="20" value="1"></label>
+        </div>
+        <label class="fld"><span>Location (town or postcode)</span><input id="bk-loc" name="location"></label>
+        <label class="fld"><span>Anything I should know?</span><textarea id="bk-msg" name="message" rows="3" placeholder="Outfit colours, jewellery, the look you have in mind…"></textarea></label>
+        <button class="btn btn-gold btn-block" type="submit" id="bkSubmit" data-cursor="Send">Send booking request</button>
+        <p class="form-msg" id="bkMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-big wrap" aria-hidden="true"><span data-s="brand_name">Naina's</span></div>
+  <div class="wrap foot-in">
+    <div><div class="logo"><img class="logo-img" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span data-s="brand_name">Naina's</span><small data-s="brand_suffix">Beauty n Beyond</small></div><p class="muted" data-s="footer_note"></p></div>
+    <div class="foot-links"><a href="#lookbook">Work</a><a href="#journal">Journal</a><a href="#book">Book</a><a href="admin.html" class="muted">Admin</a></div>
+  </div>
+  <p class="wrap copy muted">© <span id="yr"></span> <span data-s="brand_name">Naina's</span> · Story footage: Mixkit (free licence)</p>
+</footer>
+
+<!-- portfolio lightbox -->
+<div class="lb" id="lb" hidden>
+  <div class="lb-card" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+    <button class="lb-x" id="lbClose" aria-label="Close">×</button>
+    <div class="lb-media" id="lbMedia"></div>
+    <div class="lb-copy"><p class="kicker" id="lbTags"></p><h3 id="lbTitle"></h3><p id="lbText"></p><a class="btn btn-ghost btn-sm" id="lbLink" href="#">Read the full look</a></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/seed.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/ritual/manifest.js"></script>
+<script src="assets/js/home.js"></script>
+</body>
+</html>

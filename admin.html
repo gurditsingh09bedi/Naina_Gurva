@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Naina's Admin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/png" href="assets/img/logo-badge-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<section class="login" id="login" hidden>
+  <form class="login-card" id="loginForm">
+    <p class="brand"><img class="brand-logo" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span class="bn">Naina's</span> <small>Admin</small></p>
+    <h1>Sign in</h1>
+    <p class="demo-hint" id="demoHint" hidden>Demo mode: use any email and the password <b>demo</b>. Changes are saved in this browser only.</p>
+    <label class="f"><span>Email</span><input id="lg-email" type="email" autocomplete="username" required></label>
+    <label class="f"><span>Password</span><input id="lg-pass" type="password" autocomplete="current-password" required></label>
+    <button class="b b-gold" type="submit" id="lgBtn">Sign in</button>
+    <p class="err" id="lgErr" role="alert"></p>
+    <a class="back" href="index.html">← Back to the website</a>
+  </form>
+</section>
+
+<!-- APP -->
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <p class="brand"><img class="brand-logo" src="assets/img/logo-badge-160.png" alt="" width="40" height="40"><span class="bn">Naina's</span> <small>Admin</small></p>
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <button data-tab="bookings">Bookings <i id="newCount"></i></button>
+      <button data-tab="portfolio">Portfolio</button>
+      <button data-tab="blog">Journal</button>
+      <button data-tab="offers">Offers</button>
+      <button data-tab="services">Services</button>
+      <button data-tab="settings">Website text &amp; photos</button>
+    </nav>
+    <div class="side-foot">
+      <span class="mode" id="modeBadge"></span>
+      <a class="b b-ghost b-sm" href="index.html" target="_blank" rel="noopener">View website</a>
+      <button class="b b-ghost b-sm" id="signOut">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="banner" id="demoBanner" hidden>
+      <b>Demo mode.</b> Changes are saved in this browser only, so visitors won't see them. Connect the free Supabase database (README, step 2) to make edits live for everyone.
+      <button class="b b-ghost b-sm" id="resetDemo">Reset demo content</button>
+    </div>
+    <div class="banner" id="importBanner" hidden>
+      <b>Your database is empty.</b> Import the starter portfolio, journal posts, offers and services, then edit them.
+      <button class="b b-gold b-sm" id="importStarter">Import starter content</button>
+    </div>
+    <header class="main-head">
+      <div><h1 id="viewTitle">Bookings</h1><p class="sub" id="viewSub"></p></div>
+      <button class="b b-gold" id="addBtn" hidden>+ Add new</button>
+    </header>
+    <div id="view"></div>
+  </main>
+</div>
+
+<!-- EDITOR DRAWER -->
+<div class="drawer-bg" id="drawerBg" hidden>
+  <form class="drawer" id="editor" novalidate>
+    <header class="dr-head"><h2 id="edTitle">Edit</h2><button type="button" class="x" id="edClose" aria-label="Close">×</button></header>
+    <div class="dr-body" id="edBody"></div>
+    <footer class="dr-foot">
+      <span class="err" id="edErr" role="alert"></span>
+      <button type="button" class="b b-ghost" id="edCancel">Cancel</button>
+      <button type="submit" class="b b-gold" id="edSave">Save</button>
+    </footer>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/seed.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
