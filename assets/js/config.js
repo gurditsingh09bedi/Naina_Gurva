@@ -12,8 +12,8 @@
   row-level security rules in supabase/schema.sql.
 */
 window.SITE_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  SUPABASE_URL: "https://uwstzmvtgrjhoicxcqnu.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_rLmc5ooKFIcu6eTX__XYEw_0qS6ndIs",
 
   /* Email notifications and booking replies (free EmailJS account, see README → "Email notifications").
      Leave empty and the admin opens your email app / WhatsApp with the message ready instead. */
